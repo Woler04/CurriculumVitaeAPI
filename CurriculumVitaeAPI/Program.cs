@@ -1,6 +1,8 @@
 global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
 using CurriculumVitaeAPI.Data;
+using CurriculumVitaeAPI.Interfaces;
+using CurriculumVitaeAPI.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-
+builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
 builder.Services.AddDbContext<CVDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
