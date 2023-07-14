@@ -51,6 +51,5 @@ namespace CurriculumVitaeAPI.Controllers
 
             return Ok(resume);
         }
-
     }
 }

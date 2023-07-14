@@ -1,5 +1,6 @@
 global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
+using CurriculumVitaeAPI;
 using CurriculumVitaeAPI.Data;
 using CurriculumVitaeAPI.Interfaces;
 using CurriculumVitaeAPI.Repositories;
@@ -21,6 +22,7 @@ builder.Services.AddDbContext<CVDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
