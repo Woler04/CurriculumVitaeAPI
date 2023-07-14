@@ -12,10 +12,19 @@ namespace CurriculumVitaeAPI.Repositories
         {
             _context = context;
         }
+        public Resume GetResume(int id)
+        {
+            return _context.Resumes.Where(r => r.ResumeId == id).FirstOrDefault();
+        }
 
         public ICollection<Resume> GetResumes()
         {
             return _context.Resumes.OrderBy(r => r.ResumeId).ToList();
+        }
+
+        public bool isResumeExsisting(int id)
+        {
+            return _context.Resumes.Any(r => r.ResumeId == id);
         }
     }
 }
