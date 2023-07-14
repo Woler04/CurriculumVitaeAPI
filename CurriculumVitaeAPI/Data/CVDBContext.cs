@@ -24,8 +24,62 @@ namespace CurriculumVitaeAPI.Data
         public DbSet<ResumeTemplate> ResumeTemplates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            
+        { 
+            //Resume Language
+            modelBuilder.Entity<ResumeLanguage>()
+                .HasKey(e => new { e.ResumeId, e.LanguageId });
+
+            modelBuilder.Entity<ResumeLanguage>()
+                .HasOne(e => e.Language)
+                .WithMany(e => e.ResumeLanguages)
+                .HasForeignKey(e => e.LanguageId);
+
+            modelBuilder.Entity<ResumeLanguage>()
+               .HasOne(e => e.Resume)
+               .WithMany(e => e.ResumeLanguages)
+               .HasForeignKey(e => e.ResumeId);
+
+            //Resume Location
+            modelBuilder.Entity<ResumeLocation>()
+                .HasKey(e => new { e.ResumeId, e.LocationId });
+
+            modelBuilder.Entity<ResumeLocation>()
+                .HasOne(e => e.Location)
+                .WithMany(e => e.ResumeLocations)
+                .HasForeignKey(e => e.LocationId);
+
+            modelBuilder.Entity<ResumeLocation>()
+               .HasOne(e => e.Resume)
+               .WithMany(e => e.ResumeLocations)
+               .HasForeignKey(e => e.ResumeId);
+
+            //Resume Skill
+            modelBuilder.Entity<ResumeSkill>()
+               .HasKey(e => new { e.ResumeId, e.SkillId });
+
+            modelBuilder.Entity<ResumeSkill>()
+                .HasOne(e => e.Skill)
+                .WithMany(e => e.ResumeSkills)
+                .HasForeignKey(e => e.SkillId);
+
+            modelBuilder.Entity<ResumeSkill>()
+               .HasOne(e => e.Resume)
+               .WithMany(e => e.ResumeSkills)
+               .HasForeignKey(e => e.ResumeId);
+
+            //Resume Template
+            modelBuilder.Entity<ResumeTemplate>()
+               .HasKey(e => new { e.ResumeId, e.TemplateId });
+
+            modelBuilder.Entity<ResumeTemplate>()
+                .HasOne(e => e.Template)
+                .WithMany(e => e.ResumeTemplates)
+                .HasForeignKey(e => e.TemplateId);
+
+            modelBuilder.Entity<ResumeTemplate>()
+               .HasOne(e => e.Resume)
+               .WithMany(e => e.ResumeTemplates)
+               .HasForeignKey(e => e.ResumeId);
         }
 
     }

@@ -7,6 +7,6 @@
         public string TemplateName { get; set; }
         public string TemplateFilePath { get; set; }
 
-        public ICollection<ResumeTemplate?> Resumes { get; set; }
+        public ICollection<ResumeTemplate?> ResumeTemplates { get; set; }
     }
 }

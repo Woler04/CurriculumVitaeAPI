@@ -7,6 +7,6 @@
         public string City { get; set; }
         public string State { get; set; }
         public string Country { get; set; }
-        public ICollection<ResumeLocation?> Resumes { get; set; }
+        public ICollection<ResumeLocation?> ResumeLocations { get; set; }
     }
 }

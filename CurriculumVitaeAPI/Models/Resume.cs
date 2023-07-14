@@ -10,11 +10,13 @@
         public int? UserId { get; set; }
         public virtual User? User { get; set; }
 
-        public ICollection<ResumeSkill?> Skills { get; set; }
-        public ICollection<ResumeLocation?> Locations { get; set; }
         public ICollection<Certificate?> Certificates { get; set; }
         public ICollection<Education?> Educations { get; set; }
-        public ICollection<ResumeLanguage?> Languages { get; set; }
-        public ICollection<Template?> Templates { get; set; }
+        public ICollection<Experience?> Experiences { get; set; }
+        public ICollection<PersonalInfo?> PersonalInfos { get; set; }
+        public ICollection<ResumeLocation?> ResumeLocations { get; set; }
+        public ICollection<ResumeSkill?> ResumeSkills { get; set; }
+        public ICollection<ResumeLanguage?> ResumeLanguages { get; set; }
+        public ICollection<ResumeTemplate?> ResumeTemplates { get; set; }
     }
 }
