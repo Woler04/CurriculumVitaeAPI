@@ -22,6 +22,11 @@ namespace CurriculumVitaeAPI.Repositories
             return _context.Resumes.OrderBy(r => r.ResumeId).ToList();
         }
 
+        public User GetUserByResume(int id)
+        {
+            return _context.Users.Where(u => u.Resumes.Contains(GetResume(id))).FirstOrDefault();
+        }
+
         public bool isResumeExsisting(int id)
         {
             return _context.Resumes.Any(r => r.ResumeId == id);

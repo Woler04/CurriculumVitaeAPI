@@ -52,7 +52,7 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(skill);
         }
 
-        [HttpGet("resume/{skillId}")]
+        [HttpGet("resumes/{skillId}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Resume>))]
         [ProducesResponseType(400)]
         public IActionResult GetResumesBySkillId(int skillId)
@@ -67,11 +67,11 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(resumes);
         }
 
-        [HttpGet("resume")]
-        [ProducesResponseType(400)]
-        public string MissingArgument()
+        [HttpGet("resumes")]
+        [ProducesResponseType(404)]
+        public IActionResult MissingArgument()
         {
-            return "try api/skill/resume/id";
+            return NotFound( "try api/skill/resumes/id");
         }
     }
 }

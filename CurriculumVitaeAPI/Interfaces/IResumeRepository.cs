@@ -6,6 +6,7 @@ namespace CurriculumVitaeAPI.Interfaces
     {
         ICollection<Resume> GetResumes();
         Resume GetResume(int id);
+        User GetUserByResume(int id);
         bool isResumeExsisting(int id);
     }
 }

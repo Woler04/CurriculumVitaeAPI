@@ -8,6 +8,5 @@ namespace CurriculumVitaeAPI.DTOs
         public string Title { get; set; }
         public DateTime CreationTime { get; set; }
         public DateTime LastModifiedTime { get; set; }
-        public virtual User? User { get; set; }
     }
 }

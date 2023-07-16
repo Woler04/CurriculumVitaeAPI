@@ -53,7 +53,7 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(certificate);
         }
 
-        [HttpGet("resumesWith/{keyword}")]
+        [HttpGet("resumes/{keyword}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Resume>))]
         [ProducesResponseType(400)]
         public IActionResult GetResumesByKeyWord(string keyword)
@@ -68,11 +68,11 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(resumes);
         }
 
-        [HttpGet("resumesWith")]
-        [ProducesResponseType(400)]
-        public string MissingArgument()
+        [HttpGet("resumes")]
+        [ProducesResponseType(404)]
+        public IActionResult MissingArgument()
         {
-            return "try api/Certificate/resumeWith/keyword";
+            return NotFound( "try api/Certificate/resumes/keyword");
         }
     }
 }

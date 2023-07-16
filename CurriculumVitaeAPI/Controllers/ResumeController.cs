@@ -51,5 +51,32 @@ namespace CurriculumVitaeAPI.Controllers
 
             return Ok(resume);
         }
+
+        [HttpGet("users/{resumeId}")]
+        [ProducesResponseType(200, Type = typeof(User))]
+        [ProducesResponseType(400)]
+        public IActionResult GetUserByResume(int resumeId)
+        {
+            if (!_resumeRepository.isResumeExsisting(resumeId))
+            {
+                return NotFound();
+            }
+
+            var user = _mapper.Map<UserDto>(_resumeRepository.GetUserByResume(resumeId));
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(user);
+        }
+
+        [HttpGet("users")]
+        [ProducesResponseType(404)]
+        public IActionResult MissingArgument()
+        {
+            return NotFound("try api/user/id");
+        }
     }
 }
