@@ -6,7 +6,7 @@ namespace CurriculumVitaeAPI.Repositories
 {
     public class SkillRepository : ISkillRepository
     {
-        private CVDBContext _context;
+        private readonly CVDBContext _context;
 
         public SkillRepository(CVDBContext context )
         {

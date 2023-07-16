@@ -7,13 +7,11 @@ namespace CurriculumVitaeAPI.Repositories
 {
     public class ExperienceRepository : IExperienceRepository
     {
-        private CVDBContext _context;
-        private IMapper _mapper;
+        private readonly CVDBContext _context;
 
-        public ExperienceRepository(CVDBContext context, IMapper mapper)
+        public ExperienceRepository(CVDBContext context)
         {
             this._context = context;
-            this._mapper = mapper;
         }
 
         public Experience GetExperience(int id)

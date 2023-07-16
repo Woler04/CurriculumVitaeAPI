@@ -66,5 +66,12 @@ namespace CurriculumVitaeAPI.Controllers
 
             return Ok(resumes);
         }
+
+        [HttpGet("resume")]
+        [ProducesResponseType(400)]
+        public string MissingArgument()
+        {
+            return "try api/skill/resume/id";
+        }
     }
 }
