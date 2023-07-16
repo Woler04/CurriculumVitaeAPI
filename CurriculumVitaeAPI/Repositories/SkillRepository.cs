@@ -13,7 +13,6 @@ namespace CurriculumVitaeAPI.Repositories
             this._context = context;
         }
 
-
         public ICollection<Resume> GetResumesBySkillId(int skillId)
         {
             return _context.ResumeSkills.Where(rs => rs.SkillId == skillId).Select(r => r.Resume).ToList();
