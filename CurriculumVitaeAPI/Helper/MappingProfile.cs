@@ -12,6 +12,7 @@ namespace CurriculumVitaeAPI.Helper
             CreateMap<Skill, SkillDto>();
             CreateMap<Experience, ExperienceDto>();
             CreateMap<Certificate, CertificateDto>();
+            CreateMap<PersonalInfo, PersonalInfoDto>();
             CreateMap<Education, EducationDto>();
         }
     }
