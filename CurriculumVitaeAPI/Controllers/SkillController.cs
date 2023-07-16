@@ -42,7 +42,7 @@ namespace CurriculumVitaeAPI.Controllers
                 return NotFound();
             }
 
-            var skill = _mapper.Map<ResumeDto>(_skillRepository.GetSkill(skillId));
+            var skill = _mapper.Map<SkillDto>(_skillRepository.GetSkill(skillId));
 
             if (!ModelState.IsValid)
             {
