@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CurriculumVitaeAPI.DTOs;
 using CurriculumVitaeAPI.Interfaces;
 using CurriculumVitaeAPI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ namespace CurriculumVitaeAPI.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<PersonalInfo>))]
         public IActionResult GetPersonalInfos()
         {
-            var personalInfos = _mapper.Map<List<PersonalInfo>>(_personalInfoRepository.GetPersonalInfos());
+            var personalInfos = _mapper.Map<List<PersonalInfoDto>>(_personalInfoRepository.GetPersonalInfos());
 
             if (!ModelState.IsValid)
             {
@@ -41,7 +42,7 @@ namespace CurriculumVitaeAPI.Controllers
                 return NotFound();
             }
 
-            var personalInfo = _mapper.Map<PersonalInfo>(_personalInfoRepository.GetPersonalInfo(personalInfoId));
+            var personalInfo = _mapper.Map<PersonalInfoDto>(_personalInfoRepository.GetPersonalInfo(personalInfoId));
 
             if (!ModelState.IsValid)
             {
