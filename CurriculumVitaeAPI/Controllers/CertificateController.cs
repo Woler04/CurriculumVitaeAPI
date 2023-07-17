@@ -56,7 +56,7 @@ namespace CurriculumVitaeAPI.Controllers
         [HttpGet("resumes/{keyword}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Resume>))]
         [ProducesResponseType(400)]
-        public IActionResult GetResumesByKeyWord(string keyword)
+        public IActionResult GetResumesByKeyword(string keyword)
         {
             var resumes = _mapper.Map<List<ResumeDto>>(_certificateRepository.GetResumesByCertificateKeyword(keyword));
 
