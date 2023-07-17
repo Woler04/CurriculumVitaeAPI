@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CurriculumVitaeAPI.DTOs;
 using CurriculumVitaeAPI.Models;
-using CurriculumVitaeAPI.Repositories;
+using CurriculumVitaeAPI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurriculumVitaeAPI.Controllers
@@ -10,10 +10,10 @@ namespace CurriculumVitaeAPI.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public UserController(UserRepository userRepository, IMapper mapper)
+        public UserController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _mapper = mapper;
@@ -53,7 +53,7 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(user);
         }
 
-        [HttpGet("resumes/{userId}")]
+        [HttpGet("{userId}/resumes")]
         [ProducesResponseType(200, Type = typeof(User))]
         [ProducesResponseType(400)]
         public IActionResult GetResumesByUser(int userId)
@@ -71,13 +71,6 @@ namespace CurriculumVitaeAPI.Controllers
             }
 
             return Ok(resumes);
-        }
-
-        [HttpGet("resumes")]
-        [ProducesResponseType(404)]
-        public IActionResult MissingArgument()
-        {
-            return NotFound("try api/user/resumes/id");
         }
     }
 }

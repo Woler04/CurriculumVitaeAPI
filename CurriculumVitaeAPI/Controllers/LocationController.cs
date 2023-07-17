@@ -87,7 +87,7 @@ namespace CurriculumVitaeAPI.Controllers
         [ProducesResponseType(404)]
         public IActionResult MissingArgument()
         {
-            return NotFound("try api/Location/resumes/Id");
+            return NotFound("try api/location/resumes/Id");
         }
     }
 }

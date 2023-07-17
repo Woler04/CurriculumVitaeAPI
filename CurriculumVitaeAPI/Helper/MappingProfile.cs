@@ -13,6 +13,7 @@ namespace CurriculumVitaeAPI.Helper
             CreateMap<Experience, ExperienceDto>();
             CreateMap<Certificate, CertificateDto>();
             CreateMap<Location, LocationDto>();
+            CreateMap<Template, TemplateDto>();
             CreateMap<PersonalInfo, PersonalInfoDto>();
             CreateMap<User, UserDto>();
             CreateMap<Language, LanguageDto>();

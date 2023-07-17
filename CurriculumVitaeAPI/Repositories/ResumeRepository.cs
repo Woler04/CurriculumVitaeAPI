@@ -1,6 +1,7 @@
 ﻿using CurriculumVitaeAPI.Data;
 using CurriculumVitaeAPI.Interfaces;
 using CurriculumVitaeAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CurriculumVitaeAPI.Repositories
 {
@@ -14,12 +15,23 @@ namespace CurriculumVitaeAPI.Repositories
         }
         public Resume GetResume(int id)
         {
-            return _context.Resumes.Where(r => r.ResumeId == id).FirstOrDefault();
+            return _context.Resumes.Where(r => r.ResumeId == id)
+                .Include(r => r.PersonalInfos)
+                .Include(r => r.Experiences)
+                .Include(r => r.Educations)
+                .Include(r => r.Certificates)
+                .FirstOrDefault();
         }
 
         public ICollection<Resume> GetResumes()
         {
             return _context.Resumes.OrderBy(r => r.ResumeId).ToList();
+                
+        }
+
+        public ICollection<Skill> GetSkillsByResumeId(int resumeId)
+        {
+            return _context.ResumeSkills.Where(rs => rs.ResumeId == resumeId).Select(s => s.Skill).ToList();
         }
 
         public User GetUserByResume(int id)

@@ -52,7 +52,7 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(resume);
         }
 
-        [HttpGet("users/{resumeId}")]
+        [HttpGet("{resumeId}/user")]
         [ProducesResponseType(200, Type = typeof(User))]
         [ProducesResponseType(400)]
         public IActionResult GetUserByResume(int resumeId)
@@ -72,11 +72,24 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(user);
         }
 
-        [HttpGet("users")]
-        [ProducesResponseType(404)]
-        public IActionResult MissingArgument()
+        [HttpGet("{resumeId}/skills")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Skill>))]
+        [ProducesResponseType(400)]
+        public IActionResult GetResumeSkills(int resumeId)
         {
-            return NotFound("try api/user/id");
+            if (!_resumeRepository.isResumeExsisting(resumeId))
+            {
+                return NotFound();
+            }
+
+            var skills = _mapper.Map<List<SkillDto>>(_resumeRepository.GetSkillsByResumeId(resumeId));
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(skills);
         }
     }
 }
