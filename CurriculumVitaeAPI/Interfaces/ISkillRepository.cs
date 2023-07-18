@@ -8,5 +8,8 @@ namespace CurriculumVitaeAPI.Interfaces
         Skill GetSkill(int id);
         ICollection<Resume> GetResumesBySkillId(int skillId);
         bool isSkillExsisting(int id);
+
+        bool CreateSkill(Skill skill);
+        bool Save();
     }
 }

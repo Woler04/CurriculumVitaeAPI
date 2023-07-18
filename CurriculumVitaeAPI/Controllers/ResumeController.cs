@@ -10,6 +10,8 @@ namespace CurriculumVitaeAPI.Controllers
     [ApiController]
     public class ResumeController : Controller
     {
+        ////////get
+
         private readonly IResumeRepository _resumeRepository;
         private readonly IMapper _mapper;
         public ResumeController(IResumeRepository resumeRepository, IMapper mapper)
@@ -90,6 +92,41 @@ namespace CurriculumVitaeAPI.Controllers
             }
 
             return Ok(skills);
+        }
+
+        ////////post
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateResume([FromBody] ResumeDto resumeCreate)
+        {
+            if (resumeCreate == null)
+            {
+                return BadRequest();
+            }
+
+            var resume = _resumeRepository.GetResumes()
+                .Where(r => r.Title.Trim().ToLower() == resumeCreate.Title.TrimEnd().ToLower()).FirstOrDefault();
+
+            if (resume != null)
+            {
+                ModelState.AddModelError("", "Already Excists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var resumeMap = _mapper.Map<Resume>(resumeCreate);
+
+            if (!_resumeRepository.CreateResume(resumeMap))
+            {
+                ModelState.AddModelError("", "Cannot Save");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully created");
         }
     }
 }

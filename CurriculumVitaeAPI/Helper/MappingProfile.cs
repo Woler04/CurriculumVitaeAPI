@@ -9,7 +9,9 @@ namespace CurriculumVitaeAPI.Helper
         public MappingProfile()
         {
             CreateMap<Resume, ResumeDto>();
+            CreateMap<ResumeDto, Resume>();
             CreateMap<Skill, SkillDto>();
+            CreateMap<SkillDto, Skill>();
             CreateMap<Experience, ExperienceDto>();
             CreateMap<Certificate, CertificateDto>();
             CreateMap<Location, LocationDto>();

@@ -13,6 +13,7 @@ namespace CurriculumVitaeAPI.Repositories
         {
             _context = context;
         }
+
         public Resume GetResume(int id)
         {
             return _context.Resumes.Where(r => r.ResumeId == id)
@@ -42,6 +43,21 @@ namespace CurriculumVitaeAPI.Repositories
         public bool isResumeExsisting(int id)
         {
             return _context.Resumes.Any(r => r.ResumeId == id);
+        }
+        public bool CreateResume(Resume resume)
+        {
+            //change traking
+            _context.Add(resume);
+
+            return Save();
+        }
+        public bool Save()
+        {
+            if (_context.SaveChanges() > 0)
+            {
+                return true;
+            }
+                return false;   
         }
     }
 }

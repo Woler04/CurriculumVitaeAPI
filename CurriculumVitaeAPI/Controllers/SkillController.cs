@@ -73,5 +73,39 @@ namespace CurriculumVitaeAPI.Controllers
         {
             return NotFound( "try api/skill/resumes/id");
         }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateSkill([FromBody] SkillDto skillCreate)
+        {
+            if (skillCreate == null)
+            {
+                return BadRequest();
+            }
+
+            var resume = _skillRepository.GetSkills()
+                .Where(r => r.SkillName.Trim().ToLower() == skillCreate.SkillName.TrimEnd().ToLower()).FirstOrDefault();
+
+            if (resume != null)
+            {
+                ModelState.AddModelError("", "Already Excists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var skillMap = _mapper.Map<Skill>(skillCreate);
+
+            if (!_skillRepository.CreateSkill(skillMap))
+            {
+                ModelState.AddModelError("", "Cannot Save");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully created");
+        }
     }
 }

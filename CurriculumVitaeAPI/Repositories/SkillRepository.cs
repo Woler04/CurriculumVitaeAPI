@@ -32,5 +32,19 @@ namespace CurriculumVitaeAPI.Repositories
         {
             return _context.Skills.Any(s => s.SkillId == id);
         }
+        public bool CreateSkill(Skill skill)
+        {
+            _context.Add(skill);
+
+            return Save();
+        }
+        public bool Save()
+        {
+            if (_context.SaveChanges() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
