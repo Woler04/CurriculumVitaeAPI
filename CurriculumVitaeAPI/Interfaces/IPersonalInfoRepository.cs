@@ -7,5 +7,7 @@ namespace CurriculumVitaeAPI.Interfaces
         ICollection<PersonalInfo> GetPersonalInfos();
         PersonalInfo GetPersonalInfo(int id);
         bool isPersonalInfoExcisting(int id);
+        bool CreatePersonalInfo(PersonalInfo personalInfo);
+        bool Save();
     }
 }

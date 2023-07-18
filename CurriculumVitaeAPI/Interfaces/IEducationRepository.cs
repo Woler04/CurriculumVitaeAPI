@@ -7,5 +7,7 @@ namespace CurriculumVitaeAPI.Interfaces
         ICollection<Education> GetEducations();
         Education GetEducation(int id);
         bool isEducationExcisting(int id);
+        bool CreateEducation(Education education);
+        bool Save();
     }
 }

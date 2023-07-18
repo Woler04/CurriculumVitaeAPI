@@ -51,7 +51,7 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(language);
         }
 
-        [HttpGet("resumes/{languageId}")]
+        [HttpGet("/{languageId}/resumes")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Resume>))]
         [ProducesResponseType(400)]
         public IActionResult GetResumesByLanguageId(int languageId)
@@ -66,11 +66,38 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(resumes);
         }
 
-        [HttpGet("resumes")]
-        [ProducesResponseType(404)]
-        public IActionResult MissingArgument()
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateLanguage([FromQuery] int resumeId, [FromBody] LanguageDto languageCreate)
         {
-            return NotFound("try api/language/resumes/id");
+            if (languageCreate == null)
+            {
+                return BadRequest();
+            }
+
+            var skill = _languageRepository.GetLanguages()
+                .Where(r => r.LanguageName.Trim().ToLower() == languageCreate.LanguageName.TrimEnd().ToLower()).FirstOrDefault();
+
+            if (skill != null)
+            {
+                ModelState.AddModelError("", "Already Excists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var languageMap = _mapper.Map<Language>(languageCreate);
+
+            if (!_languageRepository.CreateLanguage(resumeId, languageMap))
+            {
+                ModelState.AddModelError("", "Cannot Save");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully created");
         }
     }
 }

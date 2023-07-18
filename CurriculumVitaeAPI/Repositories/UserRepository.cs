@@ -32,5 +32,19 @@ namespace CurriculumVitaeAPI.Repositories
         {
             return _context.Users.Any(u => u.Id == id);
         }
+        public bool CreateUser(User user)
+        {
+            _context.Add(user);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            if (_context.SaveChanges() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

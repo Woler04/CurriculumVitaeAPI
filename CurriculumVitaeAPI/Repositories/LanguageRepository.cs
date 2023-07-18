@@ -13,6 +13,7 @@ namespace CurriculumVitaeAPI.Repositories
             _context = context;
         }
 
+
         public Language GetLanguage(int id)
         {
             return _context.Languages.Where(l => l.LanguageId == id).FirstOrDefault();
@@ -31,6 +32,30 @@ namespace CurriculumVitaeAPI.Repositories
         public bool isLanguageExcisting(int id)
         {
             return _context.Languages.Any(l => l.LanguageId == id);
+        }
+
+        public bool CreateLanguage(int resumeId, Language language)
+        {
+            var resumeEntity = _context.Resumes.Where(e => e.ResumeId == resumeId).FirstOrDefault();
+
+            var resumeLanguage = new ResumeLanguage()
+            {
+                Language = language,
+                Resume = resumeEntity
+            };
+            _context.Add(resumeLanguage);
+
+            _context.Add(language);
+
+            return Save();
+        }
+        public bool Save()
+        {
+            if (_context.SaveChanges() > 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

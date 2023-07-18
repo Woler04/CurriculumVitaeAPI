@@ -8,6 +8,8 @@ namespace CurriculumVitaeAPI.Interfaces
         Template GetTemplate(int id);
         ICollection<Resume> GetResumesByTemplate(int id);
         bool isTemplateExcisting(int id);
+        bool CreateTemplate(int resumeId, Template template);
+        bool Save();
 
     }
 }

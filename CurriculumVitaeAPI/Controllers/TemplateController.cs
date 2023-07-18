@@ -51,7 +51,7 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(template);
         }
 
-        [HttpGet("resumes/{templateId}")]
+        [HttpGet("/{templateId}/resumes")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Resume>))]
         [ProducesResponseType(400)]
         public IActionResult GetResumesByTemplateId(int templateId)
@@ -66,11 +66,38 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(resumes);
         }
 
-        [HttpGet("resumes")]
-        [ProducesResponseType(404)]
-        public IActionResult MissingArgument()
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateTemplate([FromQuery] int resumeId, [FromBody] TemplateDto templateCreate)
         {
-            return NotFound("try api/template/resumes/id");
+            if (templateCreate == null)
+            {
+                return BadRequest();
+            }
+
+            var skill = _templateRepository.GetTemplates()
+                .Where(r => r.TemplateFilePath.Trim().ToLower() == templateCreate.TemplateFilePath.TrimEnd().ToLower() && r.TemplateName.Trim().ToLower() == templateCreate.TemplateName.TrimEnd().ToLower()).FirstOrDefault();
+
+            if (skill != null)
+            {
+                ModelState.AddModelError("", "Already Excists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var templateMap = _mapper.Map<Template>(templateCreate);
+
+            if (!_templateRepository.CreateTemplate(resumeId, templateMap))
+            {
+                ModelState.AddModelError("", "Cannot Save");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully created");
         }
     }
 }

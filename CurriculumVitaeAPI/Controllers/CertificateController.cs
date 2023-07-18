@@ -10,11 +10,13 @@ namespace CurriculumVitaeAPI.Controllers
     [ApiController]
     public class CertificateController : Controller
     {
+        private IResumeRepository _resumeRepository;
         private ICertificateRepository _certificateRepository;
         private IMapper _mapper;
 
-        public CertificateController(ICertificateRepository certificateRepository, IMapper mapper)
+        public CertificateController(ICertificateRepository certificateRepository, IResumeRepository resumeRepository, IMapper mapper)
         {
+            _resumeRepository = resumeRepository;
             _certificateRepository = certificateRepository;
             _mapper = mapper;
         }
@@ -53,7 +55,7 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(certificate);
         }
 
-        [HttpGet("resumes/{keyword}")]
+        [HttpGet("search/{keyword}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Resume>))]
         [ProducesResponseType(400)]
         public IActionResult GetResumesByKeyword(string keyword)
@@ -73,6 +75,42 @@ namespace CurriculumVitaeAPI.Controllers
         public IActionResult MissingArgument()
         {
             return NotFound( "try api/certificate/resumes/keyword");
+        }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateCertificate([FromQuery] int resumeId, [FromBody] CertificateDto certificateCreate)
+        {
+            if (certificateCreate == null)
+            {
+                return BadRequest();
+            }
+
+            var certificate = _certificateRepository.GetCertificates()
+                .Where(r => r.CertificateName.Trim().ToLower() == certificateCreate.CertificateName.TrimEnd().ToLower() &&
+                r.ResumeId == resumeId).FirstOrDefault();
+
+            if (certificate != null)
+            {
+                ModelState.AddModelError("", "Already Excists in this resume");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var certificateMap = _mapper.Map<Certificate>(certificateCreate);
+            certificateMap.Resume = _resumeRepository.GetResume(resumeId);
+
+            if (!_certificateRepository.CreateCertificate(certificateMap))
+            {
+                ModelState.AddModelError("", "Cannot Save");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully created");
         }
     }
 }

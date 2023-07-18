@@ -12,6 +12,7 @@ namespace CurriculumVitaeAPI.Repositories
         {
             _context = context;
         }
+
         public Certificate GetCertificate(int id)
         {
             return _context.Certificates.Where(c => c.CertificateId == id).FirstOrDefault();
@@ -32,6 +33,20 @@ namespace CurriculumVitaeAPI.Repositories
         public bool isCertificateExcisting(int id)
         {
             return _context.Certificates.Any(c => c.CertificateId == id);
+        }
+        public bool CreateCertificate(Certificate certificate)
+        {
+            _context.Add(certificate);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            if (_context.SaveChanges() > 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

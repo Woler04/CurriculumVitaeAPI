@@ -72,5 +72,39 @@ namespace CurriculumVitaeAPI.Controllers
 
             return Ok(resumes);
         }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateUser([FromBody] UserDto userCreate)
+        {
+            if (userCreate == null)
+            {
+                return BadRequest();
+            }
+
+            var user = _userRepository.GetUsers()
+                .Where(r => r.Username.Trim().ToLower() == userCreate.Username.TrimEnd().ToLower()).FirstOrDefault();
+
+            if (user != null)
+            {
+                ModelState.AddModelError("", "This username is taken");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var userMap = _mapper.Map<User>(userCreate);
+
+            if (!_userRepository.CreateUser(userMap))
+            {
+                ModelState.AddModelError("", "Cannot Save");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully created");
+        }
     }
 }

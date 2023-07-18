@@ -4,7 +4,7 @@
     {
         public int? LanguageId { get; set; }
         public int? ResumeId { get; set; }
-        public Language? Language { get; set; }
-        public Resume? Resume { get; set; }
+        public virtual Language? Language { get; set; }
+        public virtual Resume? Resume { get; set; }
     }
 }

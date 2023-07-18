@@ -12,6 +12,8 @@ namespace CurriculumVitaeAPI.Repositories
         {
             _context = context;
         }
+
+
         public Education GetEducation(int id)
         {
             return _context.Educations.Where(e => e.EducationId == id).FirstOrDefault();
@@ -25,6 +27,20 @@ namespace CurriculumVitaeAPI.Repositories
         public bool isEducationExcisting(int id)
         {
             return _context.Educations.Any(e => e.EducationId == id);
+        }
+
+        public bool CreateEducation(Education education)
+        {
+            _context.Add(education);
+            return Save();
+        }
+        public bool Save()
+        {
+            if (_context.SaveChanges() > 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

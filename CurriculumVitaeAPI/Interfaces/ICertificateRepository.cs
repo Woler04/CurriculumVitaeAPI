@@ -8,5 +8,7 @@ namespace CurriculumVitaeAPI.Interfaces
         Certificate GetCertificate(int id);
         ICollection<Resume> GetResumesByCertificateKeyword(string keyword);
         bool isCertificateExcisting(int id);
+        bool CreateCertificate(Certificate certificate);
+        bool Save();
     }
 }

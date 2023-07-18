@@ -12,6 +12,9 @@ namespace CurriculumVitaeAPI.Repositories
         {
             _context = context;
         }
+
+       
+
         public PersonalInfo GetPersonalInfo(int id)
         {
             return _context.PesronalInfos.Where(pi => pi.PersonalinfoId == id).FirstOrDefault();
@@ -25,6 +28,19 @@ namespace CurriculumVitaeAPI.Repositories
         public bool isPersonalInfoExcisting(int id)
         {
             return _context.PesronalInfos.Any(pi => pi.PersonalinfoId == id);
+        }
+        public bool CreatePersonalInfo(PersonalInfo personalInfo)
+        {
+            _context.Add(personalInfo);
+            return Save();
+        }
+        public bool Save()
+        {
+            if (_context.SaveChanges() > 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

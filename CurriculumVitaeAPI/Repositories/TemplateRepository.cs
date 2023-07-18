@@ -32,5 +32,28 @@ namespace CurriculumVitaeAPI.Repositories
         {
             return _context.Templates.Any(t => t.TemplateId == id);
         }
+        public bool CreateTemplate(int resumeId, Template template)
+        {
+            var resumeEntity = _context.Resumes.Where(e => e.ResumeId == resumeId).FirstOrDefault();
+
+            var resumeTemplate = new ResumeTemplate()
+            {
+                Template = template,
+                Resume = resumeEntity
+            };
+            _context.Add(resumeTemplate);
+
+            _context.Add(template);
+
+            return Save();
+        }
+        public bool Save()
+        {
+            if (_context.SaveChanges() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -6,6 +6,6 @@
         public int SkillId { get; set; }
         public string SkillName { get; set; }
 
-        public ICollection<ResumeSkill?> ResumeSkills { get; set; }
+        public virtual ICollection<ResumeSkill?> ResumeSkills { get; set; }
     }
 }

@@ -7,7 +7,7 @@
         public string LanguageName { get; set; }
         public string Level { get; set; }
 
-        public ICollection<ResumeLanguage?> ResumeLanguages { get; set; }
+        public virtual ICollection<ResumeLanguage?> ResumeLanguages { get; set; }
 
     }
 }

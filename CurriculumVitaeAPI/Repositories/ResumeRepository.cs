@@ -44,7 +44,7 @@ namespace CurriculumVitaeAPI.Repositories
         {
             return _context.Resumes.Any(r => r.ResumeId == id);
         }
-        public bool CreateResume(Resume resume)
+        public bool CreateResume(int userId, Resume resume)
         {
             //change traking
             _context.Add(resume);
@@ -58,6 +58,41 @@ namespace CurriculumVitaeAPI.Repositories
                 return true;
             }
                 return false;   
+        }
+
+        public ICollection<Location> GetLocationByResumeId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICollection<Language> GetLanguageByResumeId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICollection<Template> GetTemplateByResumeId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICollection<Education> GetEducationByResumeId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICollection<Certificate> GetCertificateByResumeId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICollection<PersonalInfo> GetPersonalInfoByResumeId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICollection<Experience> GetExperienceByResumeId(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

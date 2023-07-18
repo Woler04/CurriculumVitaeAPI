@@ -7,5 +7,7 @@ namespace CurriculumVitaeAPI.Interfaces
         ICollection<Experience> GetExperiences();
         Experience GetExperience(int id);
         bool isExperienceExcisting(int id);
+        bool CreateExperience(Experience experience);
+        bool Save();
     }
 }

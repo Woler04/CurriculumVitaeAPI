@@ -8,5 +8,7 @@ namespace CurriculumVitaeAPI.Interfaces
         Language GetLanguage(int id);
         ICollection<Resume> GetResumesByLanguage(int id);
         bool isLanguageExcisting(int id);
+        bool CreateLanguage(int resumeId, Language language);
+        bool Save();
     }
 }

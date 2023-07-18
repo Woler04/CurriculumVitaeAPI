@@ -12,10 +12,13 @@ namespace CurriculumVitaeAPI.Controllers
     {
         private readonly ISkillRepository _skillRepository;
         private readonly IMapper _mapper;
-        public SkillController(ISkillRepository skillRepository, IMapper mapper)
+        private readonly IResumeRepository _resumeRepository;
+
+        public SkillController(ISkillRepository skillRepository, IResumeRepository resumeRepository, IMapper mapper)
         {
-            this._skillRepository = skillRepository;
-            this._mapper = mapper;
+            _resumeRepository = resumeRepository;
+            _skillRepository = skillRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -52,7 +55,7 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(skill);
         }
 
-        [HttpGet("{skillId}/resume")]
+        [HttpGet("{skillId}/resumes")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Resume>))]
         [ProducesResponseType(400)]
         public IActionResult GetResumesBySkillId(int skillId)
@@ -67,27 +70,20 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(resumes);
         }
 
-        [HttpGet("resumes")]
-        [ProducesResponseType(404)]
-        public IActionResult MissingArgument()
-        {
-            return NotFound( "try api/skill/resumes/id");
-        }
-
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateSkill([FromBody] SkillDto skillCreate)
+        public IActionResult CreateSkill([FromQuery] int resumeId, [FromBody] SkillDto skillCreate)
         {
             if (skillCreate == null)
             {
                 return BadRequest();
             }
 
-            var resume = _skillRepository.GetSkills()
+            var skill = _skillRepository.GetSkills()
                 .Where(r => r.SkillName.Trim().ToLower() == skillCreate.SkillName.TrimEnd().ToLower()).FirstOrDefault();
 
-            if (resume != null)
+            if (skill != null)
             {
                 ModelState.AddModelError("", "Already Excists");
                 return StatusCode(422, ModelState);
@@ -100,7 +96,7 @@ namespace CurriculumVitaeAPI.Controllers
 
             var skillMap = _mapper.Map<Skill>(skillCreate);
 
-            if (!_skillRepository.CreateSkill(skillMap))
+            if (!_skillRepository.CreateSkill(resumeId, skillMap))
             {
                 ModelState.AddModelError("", "Cannot Save");
                 return StatusCode(500, ModelState);

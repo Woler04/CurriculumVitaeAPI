@@ -53,7 +53,7 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(location);
         }
 
-        [HttpGet("resumes/search/{keyword}")]
+        [HttpGet("/search/{keyword}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Resume>))]
         [ProducesResponseType(400)]
         public IActionResult GetResumesByKeyword(string keyword)
@@ -68,7 +68,7 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(resumes);
         }
 
-        [HttpGet("resumes/{locationId}")]
+        [HttpGet("{locationId}/resumes")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Resume>))]
         [ProducesResponseType(400)]
         public IActionResult GetResumesByKLocation(int locationId)
@@ -83,11 +83,38 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(resumes);
         }
 
-        [HttpGet("resumes")]
-        [ProducesResponseType(404)]
-        public IActionResult MissingArgument()
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateLocation([FromQuery] int resumeId, [FromBody] LocationDto locationCreate)
         {
-            return NotFound("try api/location/resumes/Id");
+            if (locationCreate == null)
+            {
+                return BadRequest();
+            }
+
+            var skill = _locationRepository.GetLocations()
+                .Where(r => r.City.Trim().ToLower() == locationCreate.City.TrimEnd().ToLower() && r.State.Trim().ToLower() == locationCreate.State.TrimEnd().ToLower() && r.Country.Trim().ToLower() == locationCreate.Country.TrimEnd().ToLower()).FirstOrDefault();
+
+            if (skill != null)
+            {
+                ModelState.AddModelError("", "Already Excists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var locationMap = _mapper.Map<Location>(locationCreate);
+
+            if (!_locationRepository.CreateLocation(resumeId, locationMap))
+            {
+                ModelState.AddModelError("", "Cannot Save");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully created");
         }
     }
 }

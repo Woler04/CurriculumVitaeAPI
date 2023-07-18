@@ -11,5 +11,7 @@
         public DateTime EndDate { get; set; }
         [ForeignKey("Resume")]
         public int ResumeId { get; set; }
+        public virtual Resume? Resume { get; set; }
+
     }
 }
