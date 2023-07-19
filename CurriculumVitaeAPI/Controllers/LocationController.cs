@@ -10,11 +10,13 @@ namespace CurriculumVitaeAPI.Controllers
     [ApiController]
     public class LocationController : Controller
     {
+        private readonly IResumeRepository _resumeRepository;
         private readonly ILocationRepository _locationRepository;
         private readonly IMapper _mapper;
 
-        public LocationController(ILocationRepository locationRepository, IMapper mapper)
+        public LocationController(ILocationRepository locationRepository, IResumeRepository resumeRepository, IMapper mapper)
         {
+            _resumeRepository = resumeRepository;
             _locationRepository = locationRepository;
             _mapper = mapper;
         }
@@ -86,7 +88,7 @@ namespace CurriculumVitaeAPI.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateLocation([FromQuery] int resumeId, [FromBody] LocationDto locationCreate)
+        public IActionResult CreateLocation([FromBody] LocationDto locationCreate)
         {
             if (locationCreate == null)
             {
@@ -108,13 +110,40 @@ namespace CurriculumVitaeAPI.Controllers
             }
 
             var locationMap = _mapper.Map<Location>(locationCreate);
-
-            if (!_locationRepository.CreateLocation(resumeId, locationMap))
+            locationMap.LocationId = 0;
+            if (!_locationRepository.CreateLocation(locationMap))
             {
                 ModelState.AddModelError("", "Cannot Save");
                 return StatusCode(500, ModelState);
             }
             return Ok("Successfully created");
+        }
+        [HttpPost("{locationId}&&{resumeId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult BindLocation(int locationId, int resumeId)
+        {
+            ResumeLocation resumeLocation = new()
+            {
+                ResumeId = resumeId,
+                Resume = _resumeRepository.GetResume(resumeId),
+                LocationId = locationId,
+                Location = _locationRepository.GetLocation(locationId)
+            };
+
+            if (_locationRepository.isBindExcsisting(resumeLocation))
+            {
+                ModelState.AddModelError("", "Already Excists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!_locationRepository.BindLocation(resumeLocation))
+            {
+                ModelState.AddModelError("", "Cannot Save");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully binded");
         }
     }
 }

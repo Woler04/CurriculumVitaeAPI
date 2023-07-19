@@ -10,12 +10,15 @@ namespace CurriculumVitaeAPI.Controllers
     [ApiController]
     public class LanguageController : Controller
     {
+        private readonly IResumeRepository _resumeRepository;
         private readonly ILanguageRepository _languageRepository;
         private readonly IMapper _mapper;
-        public LanguageController(ILanguageRepository languageRepository, IMapper mapper)
+
+        public LanguageController(ILanguageRepository languageRepository, IResumeRepository resumeRepository, IMapper mapper)
         {
-            this._languageRepository = languageRepository;
-            this._mapper = mapper;
+            _resumeRepository = resumeRepository;
+            _languageRepository = languageRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -69,7 +72,7 @@ namespace CurriculumVitaeAPI.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateLanguage([FromQuery] int resumeId, [FromBody] LanguageDto languageCreate)
+        public IActionResult CreateLanguage([FromBody] LanguageDto languageCreate)
         {
             if (languageCreate == null)
             {
@@ -91,13 +94,41 @@ namespace CurriculumVitaeAPI.Controllers
             }
 
             var languageMap = _mapper.Map<Language>(languageCreate);
-
-            if (!_languageRepository.CreateLanguage(resumeId, languageMap))
+            languageMap.LanguageId = 0;
+            if (!_languageRepository.CreateLanguage(languageMap))
             {
                 ModelState.AddModelError("", "Cannot Save");
                 return StatusCode(500, ModelState);
             }
             return Ok("Successfully created");
+        }
+
+        [HttpPost("{languageId}&&{resumeId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult BindSkill(int languageId, int resumeId)
+        {
+            ResumeLanguage resumeLanguage = new()
+            {
+                ResumeId = resumeId,
+                Resume = _resumeRepository.GetResume(resumeId),
+                LanguageId = languageId,
+                Language = _languageRepository.GetLanguage(languageId)
+            };
+
+            if (_languageRepository.isBindExcsisting(resumeLanguage))
+            {
+                ModelState.AddModelError("", "Already Excists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!_languageRepository.Bindlanguage(resumeLanguage))
+            {
+                ModelState.AddModelError("", "Cannot Save");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully binded");
         }
     }
 }
