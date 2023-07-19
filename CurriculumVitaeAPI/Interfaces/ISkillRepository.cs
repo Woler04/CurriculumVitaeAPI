@@ -11,6 +11,7 @@ namespace CurriculumVitaeAPI.Interfaces
         bool isBindExcsisting(ResumeSkill resumeSkill);
         bool BindSkill(ResumeSkill resumeSkill);
         bool CreateSkill(Skill skill);
+        bool UpdateSkill(Skill skill);
         bool Save();
     }
 }

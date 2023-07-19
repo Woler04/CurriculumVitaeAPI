@@ -48,6 +48,11 @@ namespace CurriculumVitaeAPI.Repositories
         {
             return _context.ResumeSkills.Any(rs => rs.Equals(resumeSkill));
         }
+        public bool UpdateSkill(Skill skill)
+        {
+            _context.Update(skill);
+            return Save();
+        }
 
         public bool Save()
         {
@@ -57,5 +62,6 @@ namespace CurriculumVitaeAPI.Repositories
             }
             return false;
         }
+
     }
 }
