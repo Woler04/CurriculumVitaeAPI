@@ -46,7 +46,10 @@ namespace CurriculumVitaeAPI.Repositories
         }
         public bool CreateResume(int userId, Resume resume)
         {
-            //change traking
+            var userEntity = _context.Users.Where(e => e.Id == userId).FirstOrDefault();
+
+            resume.User = userEntity;
+
             _context.Add(resume);
 
             return Save();

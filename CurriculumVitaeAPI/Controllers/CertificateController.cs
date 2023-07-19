@@ -104,6 +104,7 @@ namespace CurriculumVitaeAPI.Controllers
 
             var certificateMap = _mapper.Map<Certificate>(certificateCreate);
             certificateMap.Resume = _resumeRepository.GetResume(resumeId);
+            certificate.CertificateId = 0;
 
             if (!_certificateRepository.CreateCertificate(certificateMap))
             {

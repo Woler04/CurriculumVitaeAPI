@@ -32,21 +32,23 @@ namespace CurriculumVitaeAPI.Repositories
         {
             return _context.Skills.Any(s => s.SkillId == id);
         }
-        public bool CreateSkill(int resumeId, Skill skill)
+        public bool CreateSkill(Skill skill)
         {
-            var resumeEntity = _context.Resumes.Where(e => e.ResumeId == resumeId).FirstOrDefault();
-
-            var resumeSkill = new ResumeSkill()
-            {
-                Skill = skill,
-                Resume = resumeEntity
-            };
-            _context.Add(resumeSkill);
-
             _context.Add(skill);
 
             return Save();
         }
+
+        public bool BindSkill(ResumeSkill resumeSkill)
+        {
+            _context.Add(resumeSkill);
+            return Save();
+        }
+        public bool isBindExcsisting(ResumeSkill resumeSkill)
+        {
+            return _context.ResumeSkills.Any(rs => rs.Equals(resumeSkill));
+        }
+
         public bool Save()
         {
             if (_context.SaveChanges() > 0)

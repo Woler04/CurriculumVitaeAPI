@@ -124,7 +124,6 @@ namespace CurriculumVitaeAPI.Controllers
             }
 
             Resume resumeMap = _mapper.Map<Resume>(resumeCreate);
-            resumeMap.User = _userRepository.GetUser(userId);
 
             if (!_resumeRepository.CreateResume(userId, resumeMap))
             {

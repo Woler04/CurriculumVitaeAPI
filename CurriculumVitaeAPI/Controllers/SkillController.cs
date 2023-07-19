@@ -10,9 +10,9 @@ namespace CurriculumVitaeAPI.Controllers
     [ApiController]
     public class SkillController : Controller
     {
+        private readonly IResumeRepository _resumeRepository;
         private readonly ISkillRepository _skillRepository;
         private readonly IMapper _mapper;
-        private readonly IResumeRepository _resumeRepository;
 
         public SkillController(ISkillRepository skillRepository, IResumeRepository resumeRepository, IMapper mapper)
         {
@@ -73,7 +73,7 @@ namespace CurriculumVitaeAPI.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateSkill([FromQuery] int resumeId, [FromBody] SkillDto skillCreate)
+        public IActionResult CreateSkill([FromBody] SkillDto skillCreate)
         {
             if (skillCreate == null)
             {
@@ -95,13 +95,42 @@ namespace CurriculumVitaeAPI.Controllers
             }
 
             var skillMap = _mapper.Map<Skill>(skillCreate);
+            skillMap.SkillId = 0;
 
-            if (!_skillRepository.CreateSkill(resumeId, skillMap))
+            if (!_skillRepository.CreateSkill(skillMap))
             {
                 ModelState.AddModelError("", "Cannot Save");
                 return StatusCode(500, ModelState);
             }
             return Ok("Successfully created");
+        }
+
+        [HttpPost("{skillId}&&{resumeId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult BindSkill(int skillId, int resumeId)
+        {
+            ResumeSkill resumeSkill = new()
+            {
+                ResumeId = resumeId,
+                Resume = _resumeRepository.GetResume(resumeId),
+                SkillId = skillId,
+                Skill = _skillRepository.GetSkill(skillId)
+            };
+
+            if (_skillRepository.isBindExcsisting(resumeSkill))
+            {
+                ModelState.AddModelError("", "Already Excists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!_skillRepository.BindSkill(resumeSkill))
+            {
+                ModelState.AddModelError("", "Cannot Save");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully binded");
         }
     }
 }
