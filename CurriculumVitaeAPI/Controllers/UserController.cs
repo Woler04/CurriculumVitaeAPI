@@ -98,6 +98,7 @@ namespace CurriculumVitaeAPI.Controllers
             }
 
             var userMap = _mapper.Map<User>(userCreate);
+            userMap.Id = 0;
 
             if (!_userRepository.CreateUser(userMap))
             {

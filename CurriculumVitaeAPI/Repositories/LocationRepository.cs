@@ -40,21 +40,20 @@ namespace CurriculumVitaeAPI.Repositories
         {
             return  _context.Locations.Any(l => l.LocationId == id);
         }
-
-        public bool CreateLocation(int resumeId, Location location)
+        public bool BindLocation(ResumeLocation resumeLocation)
         {
-            var resumeEntity = _context.Resumes.Where(e => e.ResumeId == resumeId).FirstOrDefault();
-
-            var resumeLocation = new ResumeLocation()
-            {
-                Location = location,
-                Resume = resumeEntity
-            };
             _context.Add(resumeLocation);
-
+            return Save();
+        }
+        public bool CreateLocation(Location location)
+        {
             _context.Add(location);
 
             return Save();
+        }
+        public bool isBindExcsisting(ResumeLocation resumeLocation)
+        {
+            return _context.ResumeLocations.Any(rl => rl.Equals(resumeLocation));
         }
         public bool Save()
         {

@@ -8,7 +8,9 @@ namespace CurriculumVitaeAPI.Interfaces
         Template GetTemplate(int id);
         ICollection<Resume> GetResumesByTemplate(int id);
         bool isTemplateExcisting(int id);
-        bool CreateTemplate(int resumeId, Template template);
+        bool isBindExcsisting(ResumeTemplate resumeTemplate);
+        bool BindTemplate(ResumeTemplate resumeTemplate);
+        bool CreateTemplate(Template template);
         bool Save();
 
     }

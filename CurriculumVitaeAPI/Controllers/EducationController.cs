@@ -82,6 +82,7 @@ namespace CurriculumVitaeAPI.Controllers
 
             var educationMap = _mapper.Map<Education>(educationCreate);
             educationMap.Resume = _resumeRepository.GetResume(resumeId);
+            educationMap.EducationId = 0;
 
             if (!_educationRepository.CreateEducation(educationMap))
             {

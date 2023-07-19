@@ -16,12 +16,7 @@ namespace CurriculumVitaeAPI.Repositories
 
         public Resume GetResume(int id)
         {
-            return _context.Resumes.Where(r => r.ResumeId == id)
-                .Include(r => r.PersonalInfos)
-                .Include(r => r.Experiences)
-                .Include(r => r.Educations)
-                .Include(r => r.Certificates)
-                .FirstOrDefault();
+            return _context.Resumes.Where(r => r.ResumeId == id).FirstOrDefault();
         }
 
         public ICollection<Resume> GetResumes()
@@ -30,15 +25,6 @@ namespace CurriculumVitaeAPI.Repositories
                 
         }
 
-        public ICollection<Skill> GetSkillsByResumeId(int resumeId)
-        {
-            return _context.ResumeSkills.Where(rs => rs.ResumeId == resumeId).Select(s => s.Skill).ToList();
-        }
-
-        public User GetUserByResume(int id)
-        {
-            return _context.Users.Where(u => u.Resumes.Contains(GetResume(id))).FirstOrDefault();
-        }
 
         public bool isResumeExsisting(int id)
         {
@@ -46,7 +32,10 @@ namespace CurriculumVitaeAPI.Repositories
         }
         public bool CreateResume(int userId, Resume resume)
         {
-            //change traking
+            var userEntity = _context.Users.Where(e => e.Id == userId).FirstOrDefault();
+
+            resume.User = userEntity;
+
             _context.Add(resume);
 
             return Save();
@@ -60,39 +49,50 @@ namespace CurriculumVitaeAPI.Repositories
                 return false;   
         }
 
-        public ICollection<Location> GetLocationByResumeId(int id)
+        public User GetUserByResume(int id)
         {
-            throw new NotImplementedException();
+            return _context.Users.Where(u => u.Resumes.Contains(GetResume(id))).FirstOrDefault();
         }
 
-        public ICollection<Language> GetLanguageByResumeId(int id)
+        public ICollection<Skill> GetSkillsByResumeId(int resumeId)
         {
-            throw new NotImplementedException();
+            return _context.ResumeSkills.Where(rs => rs.ResumeId == resumeId).Select(s => s.Skill).ToList();
         }
 
-        public ICollection<Template> GetTemplateByResumeId(int id)
+        public ICollection<Location> GetLocationByResumeId(int resumeId)
         {
-            throw new NotImplementedException();
+            return _context.ResumeLocations.Where(e => e.ResumeId == resumeId).Select(s => s.Location).ToList();
+
         }
 
-        public ICollection<Education> GetEducationByResumeId(int id)
+        public ICollection<Language> GetLanguageByResumeId(int resumeId)
         {
-            throw new NotImplementedException();
+            return _context.ResumeLanguages.Where(e => e.ResumeId == resumeId).Select(s => s.Language).ToList();
         }
 
-        public ICollection<Certificate> GetCertificateByResumeId(int id)
+        public Template GetTemplateByResumeId(int resumeId)
         {
-            throw new NotImplementedException();
+            return _context.ResumeTemplates.Where(e => e.ResumeId == resumeId).Select(s => s.Template).FirstOrDefault();
         }
 
-        public ICollection<PersonalInfo> GetPersonalInfoByResumeId(int id)
+        public ICollection<Education> GetEducationByResumeId(int resumeId)
         {
-            throw new NotImplementedException();
+            return _context.Educations.Where(e => e.ResumeId == resumeId).ToList();
         }
 
-        public ICollection<Experience> GetExperienceByResumeId(int id)
+        public ICollection<Certificate> GetCertificateByResumeId(int resumeId)
         {
-            throw new NotImplementedException();
+            return _context.Certificates.Where(e => e.ResumeId == resumeId).ToList();
+        }
+
+        public ICollection<PersonalInfo> GetPersonalInfoByResumeId(int resumeId)
+        {
+            return _context.PesronalInfos.Where(e => e.ResumeId == resumeId).ToList();
+        }
+
+        public ICollection<Experience> GetExperienceByResumeId(int resumeId)
+        {
+            return _context.Experiences.Where(e => e.ResumeId == resumeId).ToList();
         }
     }
 }

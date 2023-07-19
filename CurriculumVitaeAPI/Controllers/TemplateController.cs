@@ -9,12 +9,14 @@ namespace CurriculumVitaeAPI.Controllers
     [ApiController]
     public class TemplateController : Controller
     {
+        private readonly IResumeRepository _resumeRepository;
         private readonly ITemplateRepository _templateRepository;
         private readonly IMapper _mapper;
-        public TemplateController(ITemplateRepository templateRepository, IMapper mapper)
+        public TemplateController(ITemplateRepository templateRepository, IResumeRepository resumeRepository, IMapper mapper)
         {
-            this._templateRepository = templateRepository;
-            this._mapper = mapper;
+            _resumeRepository = resumeRepository;
+            _templateRepository = templateRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -51,7 +53,7 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(template);
         }
 
-        [HttpGet("/{templateId}/resumes")]
+        [HttpGet("{templateId}/resumes")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Resume>))]
         [ProducesResponseType(400)]
         public IActionResult GetResumesByTemplateId(int templateId)
@@ -69,7 +71,7 @@ namespace CurriculumVitaeAPI.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateTemplate([FromQuery] int resumeId, [FromBody] TemplateDto templateCreate)
+        public IActionResult CreateTemplate([FromBody] TemplateDto templateCreate)
         {
             if (templateCreate == null)
             {
@@ -91,13 +93,41 @@ namespace CurriculumVitaeAPI.Controllers
             }
 
             var templateMap = _mapper.Map<Template>(templateCreate);
-
-            if (!_templateRepository.CreateTemplate(resumeId, templateMap))
+            templateMap.TemplateId = 0;
+            if (!_templateRepository.CreateTemplate(templateMap))
             {
                 ModelState.AddModelError("", "Cannot Save");
                 return StatusCode(500, ModelState);
             }
             return Ok("Successfully created");
+        }
+
+        [HttpPost("{templateId}&&{resumeId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult BindSkill(int templateId, int resumeId)
+        {
+            ResumeTemplate resumeTemplate = new()
+            {
+                ResumeId = resumeId,
+                Resume = _resumeRepository.GetResume(resumeId),
+                TemplateId = templateId,
+                Template = _templateRepository.GetTemplate(templateId)
+            };
+
+            if (_templateRepository.isBindExcsisting(resumeTemplate))
+            {
+                ModelState.AddModelError("", "Already Excists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!_templateRepository.BindTemplate(resumeTemplate))
+            {
+                ModelState.AddModelError("", "Cannot Save");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully binded");
         }
     }
 }

@@ -83,6 +83,7 @@ namespace CurriculumVitaeAPI.Controllers
 
             var experienceMap = _mapper.Map<Experience>(experienceCreate);
             experienceMap.Resume = _resumeRepository.GetResume(resumeId);
+            experienceMap.ExperienceId = 0;
 
             if (!_experienceRepository.CreateExperience(experienceMap))
             {

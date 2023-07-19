@@ -11,7 +11,7 @@ namespace CurriculumVitaeAPI.Interfaces
         ICollection<Skill> GetSkillsByResumeId(int id);
         ICollection<Location> GetLocationByResumeId(int id);
         ICollection<Language> GetLanguageByResumeId(int id);
-        ICollection<Template> GetTemplateByResumeId(int id);
+        Template GetTemplateByResumeId(int id);
         ICollection<Education> GetEducationByResumeId(int id);
         ICollection<Certificate> GetCertificateByResumeId(int id);
         ICollection<PersonalInfo> GetPersonalInfoByResumeId(int id);

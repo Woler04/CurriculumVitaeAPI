@@ -80,6 +80,7 @@ namespace CurriculumVitaeAPI.Controllers
 
             var personalInfoMap = _mapper.Map<PersonalInfo>(personalInfoCreate);
             personalInfoMap.Resume = _resumeRepository.GetResume(resumeId);
+            personalInfoMap.PersonalinfoId = 0;
 
             if (!_personalInfoRepository.CreatePersonalInfo(personalInfoMap))
             {

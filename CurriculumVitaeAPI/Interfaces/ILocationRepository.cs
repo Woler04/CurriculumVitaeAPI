@@ -9,8 +9,9 @@ namespace CurriculumVitaeAPI.Interfaces
         ICollection<Resume> GetResumesByLocation(int id);
         ICollection<Resume> GetResumesByKeyword(string keyword);
         bool isLocationExcisting(int id);
-
-        bool CreateLocation(int resumeId, Location location);
+        bool isBindExcsisting(ResumeLocation resumeSkill);
+        bool BindLocation(ResumeLocation resumeSkill);
+        bool CreateLocation(Location location);
         bool Save();
 
     }
