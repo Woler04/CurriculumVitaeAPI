@@ -70,13 +70,6 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(resumes);
         }
 
-        [HttpGet("resumes")]
-        [ProducesResponseType(404)]
-        public IActionResult MissingArgument()
-        {
-            return NotFound( "try api/certificate/resumes/keyword");
-        }
-
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
