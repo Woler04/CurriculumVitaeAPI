@@ -132,5 +132,54 @@ namespace CurriculumVitaeAPI.Controllers
 
             return Ok("Successfully binded");
         }
+
+        //UPDATE
+        [HttpPut("{skillId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateSkill(int skillId, [FromBody] SkillDto skillUpdate)
+        {
+            if (skillUpdate == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_skillRepository.isSkillExsisting(skillId))
+            {
+                return NotFound();
+            }
+
+            if (skillId != skillUpdate.SkillId)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var skillMap = _mapper.Map<Skill>(skillUpdate);
+
+            var skill = _skillRepository.GetSkills()
+            .Where(r => r.SkillName.Trim().ToLower() == skillMap.SkillName.TrimEnd().ToLower()).FirstOrDefault();
+
+            if (skill != null)
+            {
+                ModelState.AddModelError("", "Already Excists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (_skillRepository.GetSkills()
+                .Any(r => r == skillMap))
+            {
+                ModelState.AddModelError("", "Already excists");
+                return StatusCode(500, ModelState);
+            }
+
+            if (!_skillRepository.UpdateSkill(skillMap))
+            {
+                ModelState.AddModelError("", "Can not update");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("successfully updated");
+        }
     }
 }
