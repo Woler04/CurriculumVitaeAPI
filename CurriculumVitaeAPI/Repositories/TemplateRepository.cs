@@ -62,5 +62,22 @@ namespace CurriculumVitaeAPI.Repositories
             _context.Update(template);
             return Save();
         }
+
+        public bool UnbindTemplate(ResumeTemplate resumeTemplate)
+        {
+            _context.Remove(resumeTemplate);
+            return Save();
+        }
+
+        public ResumeTemplate GetBind(int templateId, int resumeId)
+        {
+            return _context.ResumeTemplates.Where(e => e.TemplateId == templateId && e.ResumeId == resumeId).FirstOrDefault();
+        }
+
+        public bool DeleteTemplate(Template template)
+        {
+            _context.Remove(template);
+            return Save();
+        }
     }
 }

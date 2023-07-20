@@ -12,6 +12,9 @@ namespace CurriculumVitaeAPI.Interfaces
         bool Bindlanguage(ResumeLanguage resumeLanguage);
         bool CreateLanguage( Language language);
         bool UpdateLanguage( Language language);
+        bool DeleteLanguage(Language language);
+        bool UnbindLanguage(ResumeLanguage resumeLanguage);
+        ResumeLanguage GetBind(int languageId, int resumeId);
         bool Save();
     }
 }

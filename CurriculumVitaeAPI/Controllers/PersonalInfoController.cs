@@ -160,5 +160,32 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok("Successfully updated");
         }
 
+        [HttpDelete("{personalInfoId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeletePersonalInfo(int personalInfoId)
+        {
+            if (!_personalInfoRepository.isPersonalInfoExcisting(personalInfoId))
+            {
+                return NotFound();
+            }
+
+            var personalInfoDelete = _personalInfoRepository.GetPersonalInfo(personalInfoId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_personalInfoRepository.DeletePersonalInfo(personalInfoDelete))
+            {
+                ModelState.AddModelError("", "Can not delete");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully deleted");
+        }
+
     }
 }

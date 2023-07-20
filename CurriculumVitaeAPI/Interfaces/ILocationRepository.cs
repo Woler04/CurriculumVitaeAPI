@@ -11,8 +11,11 @@ namespace CurriculumVitaeAPI.Interfaces
         bool isLocationExcisting(int id);
         bool isBindExcsisting(ResumeLocation resumeSkill);
         bool BindLocation(ResumeLocation resumeSkill);
+        bool UnbindLocation(ResumeLocation resumeLocation);
+        ResumeLocation GetBind(int locationId, int resumeId);
         bool CreateLocation(Location location);
         bool UpdateLocation(Location location);
+        bool DeleteLocation(Location location);
         bool Save();
 
     }

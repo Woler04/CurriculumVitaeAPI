@@ -48,5 +48,11 @@ namespace CurriculumVitaeAPI.Repositories
             _context.Update(personalInfo);
             return Save();
         }
+
+        public bool DeletePersonalInfo(PersonalInfo personalInfo)
+        {
+            _context.Remove(personalInfo);
+            return Save();
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace CurriculumVitaeAPI.Repositories
     {
         private readonly CVDBContext _context;
 
-        public SkillRepository(CVDBContext context )
+        public SkillRepository(CVDBContext context)
         {
             this._context = context;
         }
@@ -44,6 +44,11 @@ namespace CurriculumVitaeAPI.Repositories
             _context.Add(resumeSkill);
             return Save();
         }
+        public bool UnbindSkill(ResumeSkill resumeSkill)
+        {
+            _context.Remove(resumeSkill);
+            return Save();
+        }
         public bool isBindExcsisting(ResumeSkill resumeSkill)
         {
             return _context.ResumeSkills.Any(rs => rs.Equals(resumeSkill));
@@ -53,7 +58,11 @@ namespace CurriculumVitaeAPI.Repositories
             _context.Update(skill);
             return Save();
         }
-
+        public bool DeleteSkill(Skill skill)
+        { 
+            _context.Remove(skill);
+            return Save();
+        }
         public bool Save()
         {
             if (_context.SaveChanges() > 0)
@@ -62,6 +71,9 @@ namespace CurriculumVitaeAPI.Repositories
             }
             return false;
         }
-
+        public ResumeSkill GetBind(int skillId, int resumeId)
+        {
+            return _context.ResumeSkills.Where(e => e.SkillId == skillId && e.ResumeId == resumeId).FirstOrDefault();
+        }
     }
 }

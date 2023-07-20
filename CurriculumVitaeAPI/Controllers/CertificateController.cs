@@ -142,5 +142,33 @@ namespace CurriculumVitaeAPI.Controllers
 
             return Ok("Successfully updated");
         }
+
+        [HttpDelete("{certficateId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+        public IActionResult DeleteCertificate(int certficateId)
+        {
+            if (!_certificateRepository.isCertificateExcisting(certficateId))
+            {
+                return NotFound();
+            }
+
+            var certificateDelete = _certificateRepository.GetCertificate(certficateId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_certificateRepository.DeleteCertificate(certificateDelete))
+            {
+                ModelState.AddModelError("", "Can not delete");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully deleted");
+        }
     }
 }

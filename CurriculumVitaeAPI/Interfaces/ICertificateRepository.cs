@@ -10,6 +10,7 @@ namespace CurriculumVitaeAPI.Interfaces
         bool isCertificateExcisting(int id);
         bool CreateCertificate(Certificate certificate);
         bool UpdateCertificate(Certificate certificate);
+        bool DeleteCertificate(Certificate certificate);
         bool Save();
     }
 }
