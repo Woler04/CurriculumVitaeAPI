@@ -43,5 +43,11 @@ namespace CurriculumVitaeAPI.Repositories
             }
             return false;
         }
+
+        public bool UpdateExperience(Experience experience)
+        {
+            _context.Update(experience);
+            return Save();
+        }
     }
 }

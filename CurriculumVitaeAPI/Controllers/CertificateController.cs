@@ -106,5 +106,41 @@ namespace CurriculumVitaeAPI.Controllers
             }
             return Ok("Successfully created");
         }
+        [HttpPut("{certificateId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateCertificate(int certificateId, [FromQuery] int resumeId, [FromBody] CertificateDto certificateUpdate)
+        {
+            if (certificateUpdate == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_certificateRepository.isCertificateExcisting(certificateId))
+            {
+                return NotFound();
+            }
+
+            if (certificateId != certificateUpdate.CertificateId)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            { 
+                return BadRequest();
+            }
+
+            var certificateMap = _mapper.Map<Certificate>(certificateUpdate);
+            certificateMap.ResumeId = resumeId;
+            if (!_certificateRepository.UpdateCertificate(certificateMap))
+            {
+                ModelState.AddModelError("", "Can not update");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully updated");
+        }
     }
 }

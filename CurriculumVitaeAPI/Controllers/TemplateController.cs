@@ -129,5 +129,42 @@ namespace CurriculumVitaeAPI.Controllers
 
             return Ok("Successfully binded");
         }
+
+        [HttpPut("{templateId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateTemplate(int templateId, [FromBody] TemplateDto templateUpdate)
+        {
+            if (templateUpdate == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_templateRepository.isTemplateExcisting(templateId))
+            {
+                return NotFound();
+            }
+
+            if (templateId != templateUpdate.TemplateId)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var templateMap = _mapper.Map<Template>(templateUpdate);
+
+            if (!_templateRepository.UpdateTemplate(templateMap))
+            {
+                ModelState.AddModelError("", "Can not update");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("successfully updated");
+        }
     }
 }

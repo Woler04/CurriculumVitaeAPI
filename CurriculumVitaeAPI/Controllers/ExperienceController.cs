@@ -92,5 +92,44 @@ namespace CurriculumVitaeAPI.Controllers
             }
             return Ok("Successfully created");
         }
+
+        [HttpPut("{experienceId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateExperience(int experienceId, [FromQuery] int resumeId, [FromBody] ExperienceDto experienceUpdate)
+        {
+            if (experienceUpdate == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_experienceRepository.isExperienceExcisting(experienceId))
+            {
+                return NotFound();
+            }
+
+            if (experienceId != experienceUpdate.ExperienceId)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var experienceMap = _mapper.Map<Experience>(experienceUpdate);
+            experienceMap.ResumeId = resumeId;
+
+            if (!_experienceRepository.UpdateExperience(experienceMap))
+            {
+                ModelState.AddModelError("", "Can not update");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully updated");
+        }
+
     }
 }

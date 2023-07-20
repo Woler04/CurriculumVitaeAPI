@@ -145,5 +145,38 @@ namespace CurriculumVitaeAPI.Controllers
 
             return Ok("Successfully binded");
         }
+
+        [HttpPut("{locationId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateLocation(int locationId, [FromBody] LocationDto locationUpdate)
+        {
+            if (locationUpdate == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_locationRepository.isLocationExcisting(locationId))
+            {
+                return NotFound();
+            }
+
+            if (locationId != locationUpdate.LocationId)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var locationMap = _mapper.Map<Location>(locationUpdate);
+
+            if (!_locationRepository.UpdateLocation(locationMap))
+            {
+                ModelState.AddModelError("", "Can not update");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully updated");
+        }
     }
+
 }

@@ -12,6 +12,7 @@ namespace CurriculumVitaeAPI.Interfaces
         bool isBindExcsisting(ResumeLocation resumeSkill);
         bool BindLocation(ResumeLocation resumeSkill);
         bool CreateLocation(Location location);
+        bool UpdateLocation(Location location);
         bool Save();
 
     }

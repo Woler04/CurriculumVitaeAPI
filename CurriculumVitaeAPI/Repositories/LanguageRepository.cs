@@ -60,5 +60,10 @@ namespace CurriculumVitaeAPI.Repositories
             return Save();
         }
 
+        public bool UpdateLanguage(Language language)
+        {
+            _context.Update(language);
+            return Save();
+        }
     }
 }

@@ -8,6 +8,7 @@ namespace CurriculumVitaeAPI.Interfaces
         PersonalInfo GetPersonalInfo(int id);
         bool isPersonalInfoExcisting(int id);
         bool CreatePersonalInfo(PersonalInfo personalInfo);
+        bool UpdatePersonalInfo(PersonalInfo personalInfo);
         bool Save();
     }
 }

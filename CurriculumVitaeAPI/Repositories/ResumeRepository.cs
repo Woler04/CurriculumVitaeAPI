@@ -94,5 +94,11 @@ namespace CurriculumVitaeAPI.Repositories
         {
             return _context.Experiences.Where(e => e.ResumeId == resumeId).ToList();
         }
+
+        public bool UpdateResume(Resume resume)
+        {
+            _context.Update(resume);
+            return Save();
+        }
     }
 }

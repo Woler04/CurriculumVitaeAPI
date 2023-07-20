@@ -11,6 +11,7 @@ namespace CurriculumVitaeAPI.Interfaces
         bool isBindExcsisting(ResumeLanguage resumeLanguage);
         bool Bindlanguage(ResumeLanguage resumeLanguage);
         bool CreateLanguage( Language language);
+        bool UpdateLanguage( Language language);
         bool Save();
     }
 }

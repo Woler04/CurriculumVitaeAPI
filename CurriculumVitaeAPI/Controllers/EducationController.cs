@@ -91,5 +91,43 @@ namespace CurriculumVitaeAPI.Controllers
             }
             return Ok("Successfully created");
         }
+
+        [HttpPut("{educationId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateEducation(int educationId, [FromQuery] int resumeId, [FromBody] EducationDto educationUpdate)
+        {
+            if (educationUpdate == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_educationRepository.isEducationExcisting(educationId))
+            {
+                return NotFound();
+            }
+
+            if (educationId != educationUpdate.EducationId)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            { 
+                return BadRequest();
+            }
+
+            var educationMap = _mapper.Map<Education>(educationUpdate);
+            educationMap.ResumeId = resumeId;
+
+            if (!_educationRepository.updateEducation(educationMap))
+            {
+                ModelState.AddModelError("", "Can not update");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully updated");
+        }
     }
 }
