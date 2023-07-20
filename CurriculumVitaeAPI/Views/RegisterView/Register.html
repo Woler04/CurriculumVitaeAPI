@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link rel="icon" href="moon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">  
+</head>
+<body>
+  <div class="container">
+    <div class="gradient-box"></div>
+    <div class="overlay-box">
+      <div class="overlay-text">
+        <h2>Create Your<br><span class="account">Account</span></h2>
+        <p>Create your account and get started!</p>
+      </div>
+    </div>
+    <div class="logo">
+      <img src="moon.ico">
+    </div>
+    <div class="register-box">
+      <h1></h1>
+      <form action="register.php" method="POST">
+        <div class="name-fields">
+          <div class="textbox">
+            <label for="firstname">First Name</label>
+            <input type="text" placeholder="First Name" name="firstname" required>
+          </div>
+          <div class="textbox">
+            <label for="lastname">Last Name</label>
+            <input type="text" placeholder="Last Name" name="lastname" required>
+          </div>
+        </div>
+        <div class="textbox">
+          <label for="email">Email</label>
+          <input type="text" placeholder="Enter your email" name="email" required>
+        </div>
+        <div class="textbox">
+          <label for="password">Password</label>
+          <input type="password" placeholder="Enter your password" name="password" required>
+        </div>
+        <button type="submit" class="btn">Register</button>
+      </form>
+      <p class="login-link">Already have an account? <a href="#">Log in</a></p>
+    </div>
+  </div>
+
+</body>
+</html>

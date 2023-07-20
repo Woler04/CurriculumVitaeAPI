@@ -1,0 +1,113 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Josefin Sans', Arial, sans-serif;
+  }
+  
+  .logo {
+    position: absolute;
+    top: 1px;
+    left: 20px;
+  }
+  
+  .logo img {
+    width: 65px;
+    height: auto;
+  }
+
+  .logo-text {
+    color: #ffffff;
+    margin-left: 5px;
+    font-size: 18px;
+    position: relative;
+    top: -25px;
+  }
+
+  .black-bar {
+    background-color: #191A1B;
+    height: 50px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .button {
+    background-color: #F2EEF4;
+    color: #000000;
+    border: none;
+    border-radius: 34.13px;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .register {
+    background-color: transparent;
+    color: #ffffff;
+    border: none;
+    padding: 0;
+    margin-right: 10px;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .login-button {
+    background-color: #F2EEF4;
+    color: #000000;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .header {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 32px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: bold;
+  }
+  
+  .sub-header {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 24px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: noraml;
+    color: #050505;
+  }
+  
+  .sub-header span {
+    display: block;
+  }
+  
+  
+  .line {
+    width: 800px;
+    height: 1px;
+    background-color: rgba(102, 100, 114, 0.5);
+    margin: 20px auto;
+  }  
+  
+  .button-center {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .get-started-button {
+    background-color: #8072E5;
+    color: #fff;
+    border: none;
+    padding: 10px 50px;
+    font-size: 18px;
+    font-family: 'Josefin Sans', sans-serif;;
+    cursor: pointer;
+  }
+  
+  
+  .gradient {
+    background: linear-gradient(to bottom, rgba(95, 158, 193, 0), rgba(116, 124, 227, 0.3), rgba(89, 64, 246, 0.7));
+    height: 70vh;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
