@@ -8,7 +8,8 @@ namespace CurriculumVitaeAPI.Interfaces
         Education GetEducation(int id);
         bool isEducationExcisting(int id);
         bool CreateEducation(Education education);
-        bool updateEducation(Education education);
+        bool UpdateEducation(Education education);
+        bool DeleteEducation(Education education);
         bool Save();
     }
 }

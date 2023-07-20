@@ -54,5 +54,11 @@ namespace CurriculumVitaeAPI.Repositories
             _context.Update(certificate);
             return Save();
         }
+
+        public bool DeleteCertificate(Certificate certificate)
+        {
+            _context.Remove(certificate);
+            return Save();
+        }
     }
 }

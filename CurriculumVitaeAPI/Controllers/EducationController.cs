@@ -35,7 +35,7 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok(educations);
         }
 
-        [HttpGet("educationId")]
+        [HttpGet("{educationId}")]
         [ProducesResponseType(200, Type = typeof(Education))]
         public IActionResult GetEducation(int educationId)
         {
@@ -121,7 +121,7 @@ namespace CurriculumVitaeAPI.Controllers
             var educationMap = _mapper.Map<Education>(educationUpdate);
             educationMap.ResumeId = resumeId;
 
-            if (!_educationRepository.updateEducation(educationMap))
+            if (!_educationRepository.UpdateEducation(educationMap))
             {
                 ModelState.AddModelError("", "Can not update");
                 return StatusCode(500, ModelState);
@@ -129,5 +129,33 @@ namespace CurriculumVitaeAPI.Controllers
 
             return Ok("Successfully updated");
         }
+
+        [HttpDelete("{educationId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteEducation(int educationId)
+        {
+            if (!_educationRepository.isEducationExcisting(educationId))
+            {
+                return NotFound();
+            }
+
+            var educationDelete = _educationRepository.GetEducation(educationId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_educationRepository.DeleteEducation(educationDelete))
+            {
+                ModelState.AddModelError("", "Can not delete");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully deleted");
+        }
+
     }
 }

@@ -144,6 +144,42 @@ namespace CurriculumVitaeAPI.Controllers
 
             return Ok("Successfully updated");
         }
+        [HttpDelete("{userId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
 
+        public IActionResult DeleteUser(int userId)
+        {
+            if (!_userRepository.isUserExcisting(userId))
+            {
+                return NotFound();
+            }
+
+            var userDelete = _userRepository.GetUser(userId);
+
+
+            //delete if has any connections
+            if (userDelete.Resumes != null)
+            {
+                foreach (var resume in userDelete.Resumes)
+                {
+                    //resume Delete
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_userRepository.DeleteUser(userDelete))
+            {
+                ModelState.AddModelError("", "Can not delete");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully deleted");
+        }
     }
 }

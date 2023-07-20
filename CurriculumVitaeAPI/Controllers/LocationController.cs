@@ -177,6 +177,66 @@ namespace CurriculumVitaeAPI.Controllers
 
             return Ok("Successfully updated");
         }
+
+        [HttpDelete("{locationId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteLocation(int locationId)
+        {
+            if (!_locationRepository.isLocationExcisting(locationId))
+            {
+                return NotFound();
+            }
+
+            var locationDelete = _locationRepository.GetLocation(locationId);
+
+            // Delete if it has any connections
+            if (locationDelete.ResumeLocations != null)
+            {
+                var binds = locationDelete.ResumeLocations.ToList();
+                foreach (var bind in binds)
+                {
+                    UnbindLocation((int)bind.LocationId, (int)bind.ResumeId);
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_locationRepository.DeleteLocation(locationDelete))
+            {
+                ModelState.AddModelError("", "Can not delete");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully deleted");
+        }
+
+        [HttpDelete("{locationId}&&{resumeId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult UnbindLocation(int locationId, int resumeId)
+        {
+            ResumeLocation resumeLocation = _locationRepository.GetBind(locationId, resumeId);
+
+            if (resumeLocation == null)
+            {
+                ModelState.AddModelError("", "Already Exists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!_locationRepository.UnbindLocation(resumeLocation))
+            {
+                ModelState.AddModelError("", "Cannot Save");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully unbound");
+        }
+
     }
 
 }

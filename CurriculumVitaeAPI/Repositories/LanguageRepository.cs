@@ -65,5 +65,22 @@ namespace CurriculumVitaeAPI.Repositories
             _context.Update(language);
             return Save();
         }
+
+        public bool UnbindLanguage(ResumeLanguage resumeLanguage)
+        {
+            _context.Remove(resumeLanguage);
+            return Save();
+        }
+
+        public ResumeLanguage GetBind(int languageId, int resumeId)
+        {
+            return _context.ResumeLanguages.Where(e => e.LanguageId == languageId && e.ResumeId == resumeId).FirstOrDefault();
+        }
+
+        public bool DeleteLanguage(Language language)
+        {
+            _context.Remove(language);
+            return Save();
+        }
     }
 }

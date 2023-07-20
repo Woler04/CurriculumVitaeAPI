@@ -100,5 +100,11 @@ namespace CurriculumVitaeAPI.Repositories
             _context.Update(resume);
             return Save();
         }
+
+        public bool DeleteResume(Resume resume)
+        {
+            _context.Remove(resume);
+            return Save();
+        }
     }
 }

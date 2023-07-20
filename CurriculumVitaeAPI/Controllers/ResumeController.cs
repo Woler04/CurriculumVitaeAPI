@@ -1,4 +1,4 @@
-﻿    using AutoMapper;
+﻿using AutoMapper;
 using CurriculumVitaeAPI.DTOs;
 using CurriculumVitaeAPI.Interfaces;
 using CurriculumVitaeAPI.Models;
@@ -15,12 +15,26 @@ namespace CurriculumVitaeAPI.Controllers
         private readonly IResumeRepository _resumeRepository;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly ILocationRepository _locationRepository;
+        private readonly ISkillRepository _skillRepository;
+        private readonly ITemplateRepository _templateRepository;
+        private readonly ILanguageRepository _languageRepository;
 
-        public ResumeController(IResumeRepository resumeRepository, IUserRepository userRepository, IMapper mapper)
+        public ResumeController(IResumeRepository resumeRepository,
+            IUserRepository userRepository,
+            ILocationRepository locationRepository,
+            ISkillRepository skillRepository,
+            ITemplateRepository templateRepository,
+            ILanguageRepository languageRepository,
+            IMapper mapper)
         {
             _userRepository = userRepository;
             _resumeRepository = resumeRepository;
             _mapper = mapper;
+            _locationRepository = locationRepository;
+            _skillRepository = skillRepository;
+            _templateRepository = templateRepository;
+            _languageRepository = languageRepository;
         }
 
         [HttpGet]
@@ -308,6 +322,69 @@ namespace CurriculumVitaeAPI.Controllers
             }
 
             return Ok("Successfully updated");
+        }
+
+        [HttpDelete("{resumeId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteResume(int resumeId)
+        {
+            if (!_resumeRepository.isResumeExsisting(resumeId))
+            {
+                return NotFound();
+            }
+
+            var resumeDelete = _resumeRepository.GetResume(resumeId);
+
+            // Delete if it has any connections
+            if (resumeDelete.ResumeLocations != null)
+            {
+                foreach (var resumeLocation in resumeDelete.ResumeLocations)
+                {
+                    _locationRepository.UnbindLocation(resumeLocation);
+                }
+            }
+
+            if (resumeDelete.ResumeSkills != null)
+            {
+                foreach (var resumeSkill in resumeDelete.ResumeSkills)
+                {
+                    _skillRepository.UnbindSkill(resumeSkill);
+                }
+            }
+
+            if (resumeDelete.ResumeLanguages != null)
+            {
+                foreach (var resumeLanguage in resumeDelete.ResumeLanguages)
+                {
+                    _languageRepository.UnbindLanguage(resumeLanguage);
+                }
+            }
+
+            // Unbind templates if they exist
+            if (resumeDelete.ResumeTemplates != null)
+            {
+                foreach (var templateLanguage in resumeDelete.ResumeTemplates)
+                {
+                    _templateRepository.UnbindTemplate(templateLanguage);
+                }
+            }
+
+            // Continue with other connections if they exist (e.g., Languages, Certificates, Education, Experience, etc.)
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_resumeRepository.DeleteResume(resumeDelete))
+            {
+                ModelState.AddModelError("", "Can not delete");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully deleted");
         }
 
     }

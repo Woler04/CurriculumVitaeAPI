@@ -69,5 +69,22 @@ namespace CurriculumVitaeAPI.Repositories
             _context.Update(location);
             return Save();
         }
+
+        public bool UnbindLocation(ResumeLocation resumeLocation)
+        {
+            _context.Remove(resumeLocation);
+            return Save();
+        }
+
+        public ResumeLocation GetBind(int locationId, int resumeId)
+        {
+            return _context.ResumeLocations.Where(e => e.LocationId == locationId && e.ResumeId == resumeId).FirstOrDefault();
+        }
+
+        public bool DeleteLocation(Location location)
+        {
+            _context.Remove(location);
+            return Save();
+        }
     }
 }

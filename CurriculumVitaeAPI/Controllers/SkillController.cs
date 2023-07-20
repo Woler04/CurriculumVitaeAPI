@@ -170,5 +170,66 @@ namespace CurriculumVitaeAPI.Controllers
 
             return Ok("successfully updated");
         }
+
+        [HttpDelete("{skillId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+        public IActionResult DeleteSkill(int skillId)
+        {
+            if (!_skillRepository.isSkillExsisting(skillId))
+            {
+                return NotFound();
+            }
+
+            var skillDelete = _skillRepository.GetSkill(skillId);
+
+
+            //delete if has any connections
+            if (skillDelete.ResumeSkills != null)
+            {
+                var binds = skillDelete.ResumeSkills.ToList();
+                foreach (var bind in binds)
+                {
+                    UnbindSkill((int)bind.SkillId, (int)bind.ResumeId);
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_skillRepository.DeleteSkill(skillDelete))
+            {
+                ModelState.AddModelError("", "Can not delete");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully deleted");
+        }
+
+        [HttpDelete("{skillId}&&{resumeId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult UnbindSkill(int skillId, int resumeId)
+        {
+            ResumeSkill resumeSkill = _skillRepository.GetBind(skillId, resumeId);
+
+            if (resumeSkill == null)
+            {
+                ModelState.AddModelError("", "Already Excists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!_skillRepository.UnbindSkill(resumeSkill))
+            {
+                ModelState.AddModelError("", "Cannot Save");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully binded");
+        }
     }
 }

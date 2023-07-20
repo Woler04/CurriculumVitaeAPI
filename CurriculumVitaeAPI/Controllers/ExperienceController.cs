@@ -131,5 +131,32 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok("Successfully updated");
         }
 
+        [HttpDelete("{experienceId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteExperience(int experienceId)
+        {
+            if (!_experienceRepository.isExperienceExcisting(experienceId))
+            {
+                return NotFound();
+            }
+
+            var experienceDelete = _experienceRepository.GetExperience(experienceId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_experienceRepository.DeleteExperience(experienceDelete))
+            {
+                ModelState.AddModelError("", "Can not delete");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully deleted");
+        }
+
     }
 }
