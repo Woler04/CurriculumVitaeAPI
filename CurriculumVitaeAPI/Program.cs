@@ -30,7 +30,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("https://woler04.github.io/Curriculum-Vitae/")
+                          policy.WithOrigins("https://woler04.github.io")
                           .SetIsOriginAllowedToAllowWildcardSubdomains();
                       });
 });
