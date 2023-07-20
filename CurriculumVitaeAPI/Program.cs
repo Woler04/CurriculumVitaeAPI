@@ -32,6 +32,8 @@ builder.Services.AddCors(options =>
                       {
                           policy.WithOrigins("https://woler04.github.io")
                           .SetIsOriginAllowedToAllowWildcardSubdomains();
+                          policy.WithOrigins("http://127.0.0.1:5500")
+                          .SetIsOriginAllowedToAllowWildcardSubdomains();
                       });
 });
 
