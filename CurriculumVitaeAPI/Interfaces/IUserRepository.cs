@@ -8,7 +8,8 @@ namespace CurriculumVitaeAPI.Interfaces
         User GetUser(int id);
         ICollection<Resume> GetResumesByUser(int id);
         bool isUserExcisting(int id);
-        bool CreateUser(User certificate);
+        bool CreateUser(User user);
+        bool UpdateUser(User user);
         bool Save();
     }
 }

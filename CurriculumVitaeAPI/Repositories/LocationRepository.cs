@@ -63,5 +63,11 @@ namespace CurriculumVitaeAPI.Repositories
             }
             return false;
         }
+
+        public bool UpdateLocation(Location location)
+        {
+            _context.Update(location);
+            return Save();
+        }
     }
 }

@@ -89,5 +89,76 @@ namespace CurriculumVitaeAPI.Controllers
             }
             return Ok("Successfully created");
         }
+
+        [HttpPut("{personalInfoId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdatePersonalInfo(int personalInfoId,[FromQuery] int resumeId, [FromBody] PersonalInfoDto personalInfoUpdate)
+        {
+            if (personalInfoUpdate == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_personalInfoRepository.isPersonalInfoExcisting(personalInfoId))
+            {
+                return NotFound();
+            }
+
+            if (personalInfoId != personalInfoUpdate.PersonalinfoId)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var personalInfoMap = _mapper.Map<PersonalInfo>(personalInfoUpdate);
+            personalInfoMap.ResumeId = resumeId;
+
+            if (!_personalInfoRepository.UpdatePersonalInfo(personalInfoMap))
+            {
+                ModelState.AddModelError("", "Can not update");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully updated");
+        }
+
+        [HttpPut("{resumeId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateResume(int resumeId, [FromBody] ResumeDto resumeUpdate)
+        {
+            if (resumeUpdate == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_resumeRepository.isResumeExsisting(resumeId))
+            {
+                return NotFound();
+            }
+
+            if (resumeId != resumeUpdate.ResumeId)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var resumeMap = _mapper.Map<Resume>(resumeUpdate);
+
+            if (!_resumeRepository.UpdateResume(resumeMap))
+            {
+                ModelState.AddModelError("", "Can not update");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully updated");
+        }
+
     }
 }

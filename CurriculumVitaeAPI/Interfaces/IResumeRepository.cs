@@ -20,6 +20,7 @@ namespace CurriculumVitaeAPI.Interfaces
 
         //post/create
         bool CreateResume(int userId, Resume resume);
+        bool UpdateResume(Resume resume);
         bool Save();
     }
 }

@@ -56,5 +56,11 @@ namespace CurriculumVitaeAPI.Repositories
             }
             return false;
         }
+
+        public bool UpdateTemplate(Template template)
+        {
+            _context.Update(template);
+            return Save();
+        }
     }
 }

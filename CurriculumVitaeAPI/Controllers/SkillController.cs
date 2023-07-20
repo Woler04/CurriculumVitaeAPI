@@ -155,23 +155,12 @@ namespace CurriculumVitaeAPI.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             var skillMap = _mapper.Map<Skill>(skillUpdate);
-
-            var skill = _skillRepository.GetSkills()
-            .Where(r => r.SkillName.Trim().ToLower() == skillMap.SkillName.TrimEnd().ToLower()).FirstOrDefault();
-
-            if (skill != null)
-            {
-                ModelState.AddModelError("", "Already Excists");
-                return StatusCode(422, ModelState);
-            }
-
-            if (_skillRepository.GetSkills()
-                .Any(r => r == skillMap))
-            {
-                ModelState.AddModelError("", "Already excists");
-                return StatusCode(500, ModelState);
-            }
 
             if (!_skillRepository.UpdateSkill(skillMap))
             {

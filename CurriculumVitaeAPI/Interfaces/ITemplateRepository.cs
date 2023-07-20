@@ -11,6 +11,7 @@ namespace CurriculumVitaeAPI.Interfaces
         bool isBindExcsisting(ResumeTemplate resumeTemplate);
         bool BindTemplate(ResumeTemplate resumeTemplate);
         bool CreateTemplate(Template template);
+        bool UpdateTemplate(Template template);
         bool Save();
 
     }

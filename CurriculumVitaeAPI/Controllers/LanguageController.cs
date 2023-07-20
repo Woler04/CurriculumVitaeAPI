@@ -103,10 +103,47 @@ namespace CurriculumVitaeAPI.Controllers
             return Ok("Successfully created");
         }
 
+        [HttpPut("{languageId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateLanguage(int languageId, [FromBody] LanguageDto languageUpdate)
+        {
+            if (languageUpdate == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_languageRepository.isLanguageExcisting(languageId))
+            {
+                return NotFound();
+            }
+
+            if (languageId != languageUpdate.LanguageId)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var languageMap = _mapper.Map<Language>(languageUpdate);
+
+            if (!_languageRepository.UpdateLanguage(languageMap))
+            {
+                ModelState.AddModelError("", "Can not update");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully updated");
+        }
+       
         [HttpPost("{languageId}&&{resumeId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult BindSkill(int languageId, int resumeId)
+        public IActionResult BindLanguage(int languageId, int resumeId)
         {
             ResumeLanguage resumeLanguage = new()
             {

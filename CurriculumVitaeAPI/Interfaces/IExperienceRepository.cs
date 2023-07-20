@@ -8,6 +8,7 @@ namespace CurriculumVitaeAPI.Interfaces
         Experience GetExperience(int id);
         bool isExperienceExcisting(int id);
         bool CreateExperience(Experience experience);
+        bool UpdateExperience(Experience experience);
         bool Save();
     }
 }

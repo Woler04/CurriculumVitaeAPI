@@ -42,5 +42,11 @@ namespace CurriculumVitaeAPI.Repositories
             }
             return false;
         }
+
+        public bool updateEducation(Education education)
+        {
+            _context.Update(education);
+            return Save();
+        }
     }
 }
